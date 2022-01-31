@@ -46,15 +46,16 @@
         <article><p><a href="https://travis-ci.org/owncloud/owncloud-sdk"><img src="https://travis-ci.org/owncloud/owncloud-sdk.svg?branch=master" alt="Build Status"></a>
 <a href="https://codecov.io/gh/owncloud/owncloud-sdk"><img src="https://codecov.io/gh/owncloud/owncloud-sdk/branch/master/graph/badge.svg" alt="codecov"></a>
 <a href="https://owncloud.github.io/owncloud-sdk/"><img src="https://img.shields.io/badge/api_docs-online-blue.svg" alt="docs"></a></p>
-<p align="center">
-  <img src="https://i.imgur.com/9mKra3O.png" />
-</p>
-<p>Use this light-weight JS library with a promise-based interface for seamless communication with your ownCloud instance.<br>
-Supports only browser JS but requires JavaScript techniques like webpack to compile it properly.<br>
-For Node.js please have a look at <a href="https://github.com/owncloud/owncloud-sdk/releases/tag/last-nodejs">this tag</a>.</p>
-<h2>Install</h2>
-<pre class="prettyprint source"><code>$ npm install owncloud-sdk
+<h1>ownCloud JavaScript SDK</h1>
+<p>Use this light-weight JS library with a promise-based interface for seamless communication with your ownCloud instance, both from the browser and from Node backends.</p>
+<h2>Installation</h2>
+<p>Run either</p>
+<pre class="prettyprint source"><code>npm install owncloud-sdk
 </code></pre>
+<p>or</p>
+<pre class="prettyprint source"><code>yarn add owncloud-sdk
+</code></pre>
+<p>to add the <code>owncloud-sdk</code> to your project.</p>
 <h2>Usage</h2>
 <pre class="prettyprint source lang-js"><code>const owncloud = require('owncloud-sdk');
 let oc = new owncloud({
@@ -90,17 +91,19 @@ oc.files.list('/path/to/file/folder').then(files => {
 </code></pre>
 <h2>Example Projects</h2>
 <h3>ownCloud web</h3>
-<p><a href="https://github.com/owncloud/web">ownCloud web</a> will be the next generation web frontend for ownCloud. It uses owncloud-sdk.</p>
-<h2>All Methods Available</h2>
-<p>Full API documentation is available at <a href="https://owncloud.github.io/owncloud-sdk/"><img src="https://img.shields.io/badge/api_docs-online-blue.svg" alt="docs"></a></p>
-<h2>Building the Documentation</h2>
-<h3>JSDocs</h3>
-<p>To build the jsdocs, type this command and follow the instructions on the terminal:</p>
-<pre class="prettyprint source"><code>$ yarn build:docs
+<p><a href="https://github.com/owncloud/web">ownCloud web</a> is the next generation web frontend for ownCloud.</p>
+<h3>ownCloud file-picker</h3>
+<p><a href="github.com/owncloud/file-picker">ownCloud file-picker</a> is an integration to access the files in your ownCloud, e.g. in a chat app.</p>
+<h2>Documentation</h2>
+<p>The full API documentation is available <a href="https://owncloud.dev/owncloud-sdk/">on the docs website</a>.</p>
+<h3>Building the docs</h3>
+<p>The docs are based on JSDocs.
+To build them, run the following command and follow the instructions on the terminal:</p>
+<pre class="prettyprint source"><code>yarn build:docs
 </code></pre>
 <h2>Unit/Integration tests</h2>
 <h3>Overview</h3>
-<p>owncloud-sdk uses <a href="https://github.com/pact-foundation/pact-js">pactjs</a> with jest for unit and integration test.</p>
+<p><code>owncloud-sdk</code> uses <a href="https://github.com/pact-foundation/pact-js">pactjs</a> with jest for unit and integration tests.</p>
 <p>On the pact provider side, tests have 4 different <code>interactions</code>:</p>
 <ul>
 <li>interactions that work on both oc10 &amp; ocis</li>
@@ -125,44 +128,25 @@ oc.files.list('/path/to/file/folder').then(files => {
   })
 })
 </code></pre>
-<h3>Running Tests</h3>
+<h3>Running tests</h3>
 <p>At first, you need to create <code>config.json</code> file.</p>
-<pre class="prettyprint source"><code>$ cp tests/config/config.sample.json tests/config/config.json
+<pre class="prettyprint source"><code>cp tests/config/config.sample.json tests/config/config.json
 </code></pre>
-<h3>consumer tests</h3>
+<h3>Consumer tests</h3>
 <p>The pact consumer tests checks owncloud sdk against the pact mock server. In order to run these tests, use the following command:</p>
-<pre class="prettyprint source"><code>$ yarn test-consumer
+<pre class="prettyprint source"><code>yarn test-consumer
 </code></pre>
 <blockquote>
 <p>Note: If you have pacts from old test run in <code>tests/pacts</code> your tests will fail. Make sure to delete that before you run the tests again.</p>
 </blockquote>
 <h3>Provider tests</h3>
 <p>The pact provider tests the pacts generated from the consumer tests against the real owncloud backend server. For this you will need an actual owncloud server running. Then you can run the pact tests with the following command:</p>
-<pre class="prettyprint source"><code>$ PROVIDER_BASE_URL=&lt;owncloud-backend-url> yarn test-provider
+<pre class="prettyprint source"><code>PROVIDER_BASE_URL=&lt;owncloud-backend-url> yarn test-provider
 </code></pre>
-<h2>Team</h2>
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top">
-        <img width="150" height="150" src="http://gravatar.com/avatar/fb09a21ff4cb473d6cf5e70c5fc0f751?s=144">
-        <br>
-        <a href="https://github.com/noveens">Noveen Sachdeva</a>
-      </td>
-      <td align="center" valign="top">
-        <img width="150" height="150" src="https://avatars1.githubusercontent.com/u/277525?v=3&s=144">
-        <br>
-        <a href="https://github.com/PVince81">Vincent Petry</a>
-      </td>
-      <td align="center" valign="top">
-        <img width="150" height="150" src="https://avatars0.githubusercontent.com/u/1005065?s=144&v=4">
-        <br>
-        <a href="https://github.com/DeepDiver1975">Thomas Müller</a>
-      </td>
-     </tr>
-  </tbody>
-</table>
-<h1><img src="http://cltk.org/assets/GSoC2016Logo.jpg" alt="GSoC'17"></h1></article>
+<h2>Credits</h2>
+<p>This project was originally created by <a href="https://github.com/noveens">Noveen Sachdeva</a>, <a href="https://github.com/PVince81">Vincent Petry</a> and <a href="https://github.com/DeepDiver1975">Thomas Müller</a> as part of the <a href="https://summerofcode.withgoogle.com/archive/2017/projects/5166409181036544">2017 Google Summer of Code</a>.</p>
+<h2>License</h2>
+<p>The ownCloud SDK is released under the <a href="https://github.com/owncloud/owncloud-sdk/blob/master/LICENSE.md">MIT License</a>.</p></article>
     </section>
 
 
@@ -179,7 +163,7 @@ oc.files.list('/path/to/file/folder').then(files => {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Jan 26 2022 18:02:14 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Jan 31 2022 14:50:47 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
