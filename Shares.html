@@ -38,6 +38,7 @@ Supported Methods are:
          <li>shareFileWithLink</li>
          <li>updateShare</li>
          <li>shareFileWithUser</li>
+         <li>shareSpaceWithUser</li>
          <li>shareFileWithGroup</li>
          <li>getShares</li>
          <li>isShared</li>
@@ -226,6 +227,157 @@ Supported Methods are:
     
 
     
+    <h4 class="name" id="_getOptionalParams"><span class="type-signature"></span>_getOptionalParams<span class="signature">(optionalParams)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>optionalParams</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line447">line 447</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="acceptRemoteShare"><span class="type-signature"></span>acceptRemoteShare<span class="signature">(shareId)</span><span class="type-signature"> &rarr; {Promise.&lt;status>|Promise.&lt;error>}</span></h4>
     
 
@@ -327,7 +479,7 @@ Supported Methods are:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line297">line 297</a>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line307">line 307</a>
     </li></ul></dd>
     
 
@@ -506,7 +658,7 @@ Supported Methods are:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line316">line 316</a>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line326">line 326</a>
     </li></ul></dd>
     
 
@@ -584,7 +736,7 @@ Supported Methods are:
     
 
     
-    <h4 class="name" id="deleteShare"><span class="type-signature"></span>deleteShare<span class="signature">(shareId)</span><span class="type-signature"> &rarr; {Promise.&lt;status>|Promise.&lt;error>}</span></h4>
+    <h4 class="name" id="deleteShare"><span class="type-signature"></span>deleteShare<span class="signature">(shareId, urlParams)</span><span class="type-signature"> &rarr; {Promise.&lt;status>|Promise.&lt;error>}</span></h4>
     
 
     
@@ -648,6 +800,29 @@ Supported Methods are:
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>urlParams</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">{shareWith: string}</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -685,7 +860,7 @@ Supported Methods are:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line377">line 377</a>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line388">line 388</a>
     </li></ul></dd>
     
 
@@ -955,7 +1130,7 @@ Supported Methods are:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line399">line 399</a>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line418">line 418</a>
     </li></ul></dd>
     
 
@@ -1134,7 +1309,7 @@ Supported Methods are:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line259">line 259</a>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line269">line 269</a>
     </li></ul></dd>
     
 
@@ -1337,7 +1512,7 @@ Supported Methods are:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line174">line 174</a>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line184">line 184</a>
     </li></ul></dd>
     
 
@@ -1516,7 +1691,7 @@ Supported Methods are:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line240">line 240</a>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line250">line 250</a>
     </li></ul></dd>
     
 
@@ -1646,7 +1821,7 @@ Supported Methods are:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line278">line 278</a>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line288">line 288</a>
     </li></ul></dd>
     
 
@@ -1871,7 +2046,7 @@ Supported Methods are:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line134">line 134</a>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line154">line 154</a>
     </li></ul></dd>
     
 
@@ -2073,7 +2248,7 @@ Supported Methods are:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line44">line 44</a>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -2298,7 +2473,255 @@ Supported Methods are:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line90">line 90</a>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line91">line 91</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+<ul>
+        <li>
+<div class="param-desc">
+    instance of class ShareInfo
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="ShareInfo.html">ShareInfo</a>></span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    string: error message, if any.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;error></span>
+
+
+    </dd>
+</dl>
+</li>
+    </ul>
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="shareSpaceWithUser"><span class="type-signature"></span>shareSpaceWithUser<span class="signature">(path, username, spaceId, optionalParams)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="ShareInfo.html">ShareInfo</a>>|Promise.&lt;error>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Shares a space with specified user
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">path to the remote file share</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>username</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">name of the user to share with</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>spaceId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">id of the space</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>optionalParams</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">{permissions: integer, expirationDate: ISO Date, remoteUser: boolean, attributes: assoc array (at free disposal)}</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line122">line 122</a>
     </li></ul></dd>
     
 
@@ -2500,7 +2923,7 @@ Supported Methods are:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line336">line 336</a>
+        <a href="shareManagement.js.html">shareManagement.js</a>, <a href="shareManagement.js.html#line346">line 346</a>
     </li></ul></dd>
     
 
@@ -2594,7 +3017,7 @@ Supported Methods are:
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Feb 15 2022 09:42:32 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Mar 03 2022 10:11:06 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
