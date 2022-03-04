@@ -8,7 +8,7 @@ describe('Main: Currently testing file versions management,', function () {
   const { testUser, testUserPassword } = config
 
   const {
-    applicationXmlResponseHeaders,
+    applicationXmlContentType,
     getCurrentUserInformationInteraction,
     getCapabilitiesInteraction,
     createOwncloud,
@@ -82,7 +82,8 @@ describe('Main: Currently testing file versions management,', function () {
             '.*\\/remote\\.php\\/dav\\/meta\\/42\\/v',
             '/remote.php/dav/meta/42/v'
           ),
-          headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+          headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
+          contentType: applicationXmlContentType['Content-Type'],
           body: new XmlBuilder('1.0', '', 'd:propfind').build(dPropfind => {
             dPropfind.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
             dPropfind.appendElement('d:prop', '', '')
@@ -90,7 +91,7 @@ describe('Main: Currently testing file versions management,', function () {
         })
         .willRespondWith({
           status: 404,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: new XmlBuilder('1.0', 'utf-8', 'd:error').build(dError => {
             dError.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:s': 'http://sabredav.org/ns' })
             dError.appendElement('s:exception', '', MatchersV3.equal('Sabre\\DAV\\Exception\\NotFound'))
@@ -150,7 +151,8 @@ describe('Main: Currently testing file versions management,', function () {
             '/remote.php/dav/meta/${fileId}/v', /* eslint-disable-line no-template-curly-in-string */
             `/remote.php/dav/meta/${fileInfo.id}/v`
           ),
-          headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+          headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
+          contentType: 'application/xml; charset=utf-8',
           body: new XmlBuilder('1.0', '', 'd:propfind').build(dPropfind => {
             dPropfind.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
             dPropfind.appendElement('d:prop', '', '')
@@ -158,7 +160,7 @@ describe('Main: Currently testing file versions management,', function () {
         })
         .willRespondWith({
           status: 207,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: new XmlBuilder('1.0', '', 'd:multistatus').build(dMultistatus => {
             dMultistatus.setAttributes({
               'xmlns:d': 'DAV:',

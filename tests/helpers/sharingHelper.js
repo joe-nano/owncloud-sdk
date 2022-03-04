@@ -1,7 +1,7 @@
 const fetch = require('sync-fetch')
 const {
   getAuthHeaders,
-  applicationFormUrlEncoded,
+  applicationFormUrlEncodedContentType,
   sanitizeUrl,
   getProviderBaseUrl,
   encodeURIPath
@@ -44,8 +44,9 @@ const shareResource = function (username, password, shareParams) {
     body: params,
     headers: {
       authorization: getAuthHeaders(username, password),
-      ...applicationFormUrlEncoded
-    }
+      ...applicationFormUrlEncodedContentType
+    },
+    contentType: applicationFormUrlEncodedContentType['Content-Type']
   })
 }
 

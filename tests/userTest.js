@@ -15,7 +15,7 @@ describe('Main: Currently testing user management,', function () {
     createOwncloud,
     createProvider
   } = require('./helpers/pactHelper.js')
-  const { validAdminAuthHeaders, xmlResponseHeaders, applicationFormUrlEncoded } = require('./helpers/pactHelper.js')
+  const { validAdminAuthHeaders, xmlResponseHeaders, applicationFormUrlEncodedContentType } = require('./helpers/pactHelper.js')
   const getUserInformationInteraction = async function (provider, requestName, username, responseBody) {
     if (username !== config.adminUsername && username !== config.nonExistentUser) {
       await provider
@@ -79,8 +79,9 @@ describe('Main: Currently testing user management,', function () {
         ),
         headers: {
           ...validAdminAuthHeaders,
-          ...applicationFormUrlEncoded
+          ...applicationFormUrlEncodedContentType
         },
+        contentType: applicationFormUrlEncodedContentType['Content-Type'],
         body: requestBody
       })
       .willRespondWith({
@@ -120,8 +121,9 @@ describe('Main: Currently testing user management,', function () {
         headers:
           {
             ...validAdminAuthHeaders,
-            ...applicationFormUrlEncoded
+            ...applicationFormUrlEncodedContentType
           },
+        contentType: applicationFormUrlEncodedContentType['Content-Type'],
         body: 'groupid=' + group
       })
       .willRespondWith({
@@ -193,8 +195,9 @@ describe('Main: Currently testing user management,', function () {
         headers:
           {
             ...validAdminAuthHeaders,
-            ...applicationFormUrlEncoded
+            ...applicationFormUrlEncodedContentType
           },
+        contentType: applicationFormUrlEncodedContentType['Content-Type'],
         body: 'groupid=' + group
       })
       .willRespondWith({
@@ -233,8 +236,9 @@ describe('Main: Currently testing user management,', function () {
         headers:
           {
             ...validAdminAuthHeaders,
-            ...applicationFormUrlEncoded
+            ...applicationFormUrlEncodedContentType
           },
+        contentType: applicationFormUrlEncodedContentType['Content-Type'],
         body: 'groupid=' + group
       })
       .willRespondWith({

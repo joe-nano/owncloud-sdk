@@ -20,9 +20,9 @@ describe('Main: Currently testing file/folder sharing,', function () {
   const config = require('./config/config.json')
 
   const {
-    applicationXmlResponseHeaders,
+    applicationXmlContentType,
     xmlResponseHeaders,
-    applicationFormUrlEncoded,
+    applicationFormUrlEncodedContentType,
     getCapabilitiesInteraction,
     getCurrentUserInformationInteraction,
     createOwncloud,
@@ -245,8 +245,9 @@ describe('Main: Currently testing file/folder sharing,', function () {
         body: toFormUrlEncoded(formData),
         headers: {
           ...validAuthHeaders,
-          ...applicationFormUrlEncoded
-        }
+          ...applicationFormUrlEncodedContentType
+        },
+        contentType: applicationFormUrlEncodedContentType['Content-Type']
       })
       .willRespondWith({
         status: 200,
@@ -750,13 +751,14 @@ describe('Main: Currently testing file/folder sharing,', function () {
             ),
             headers: {
               ...validAuthHeaders,
-              ...applicationFormUrlEncoded
+              ...applicationFormUrlEncodedContentType
             },
+            contentType: applicationFormUrlEncodedContentType['Content-Type'],
             body: 'shareType=3' + '&path=%2F' + nonExistentFile + '&password=' + testUserPassword
           }).willRespondWith({
             status: 200,
             headers: {
-              ...applicationXmlResponseHeaders
+              ...applicationXmlContentType
             },
             body: new XmlBuilder('1.0', '', 'ocs').build(ocs => {
               ocs.appendElement('meta', '', (meta) => {
@@ -779,12 +781,13 @@ describe('Main: Currently testing file/folder sharing,', function () {
             ),
             headers: {
               ...validAuthHeaders,
-              ...applicationFormUrlEncoded
+              ...applicationFormUrlEncodedContentType
             },
+            contentType: applicationFormUrlEncodedContentType['Content-Type'],
             body: 'shareType=1&shareWith=' + testGroup + '&path=%2F' + nonExistentFile + '&permissions=19'
           }).willRespondWith({
             status: 200,
-            headers: applicationXmlResponseHeaders,
+            headers: applicationXmlContentType,
             body: new XmlBuilder('1.0', '', 'ocs').build(ocs => {
               ocs.appendElement('meta', '', (meta) => {
                 ocsMeta(meta, 'failure', 404, 'Wrong path, file/folder doesn\'t exist')
@@ -879,8 +882,9 @@ describe('Main: Currently testing file/folder sharing,', function () {
             ),
             headers: {
               ...validAuthHeaders,
-              ...applicationFormUrlEncoded
+              ...applicationFormUrlEncodedContentType
             },
+            contentType: applicationFormUrlEncodedContentType['Content-Type'],
             body: 'shareType=0&shareWith=' + sharee + '&path=' + fileEncoded + '&expireDate=' + config.expirationDate
           })
           .willRespondWith({
@@ -913,8 +917,9 @@ describe('Main: Currently testing file/folder sharing,', function () {
             ),
             headers: {
               ...validAuthHeaders,
-              ...applicationFormUrlEncoded
+              ...applicationFormUrlEncodedContentType
             },
+            contentType: applicationFormUrlEncodedContentType['Content-Type'],
             body: toFormUrlEncoded(formData)
           })
           .willRespondWith({

@@ -14,7 +14,7 @@ describe('Main: Currently testing files management,', function () {
     resourceNotFoundExceptionMessage,
     webdavPath,
     testSubFiles,
-    applicationXmlResponseHeaders,
+    applicationXmlContentType,
     getCurrentUserInformationInteraction,
     getCapabilitiesInteraction,
     getAuthHeaders,
@@ -60,13 +60,13 @@ describe('Main: Currently testing files management,', function () {
     if (requestName.includes('non existing')) {
       response = {
         status: 404,
-        headers: applicationXmlResponseHeaders,
+        headers: applicationXmlContentType,
         body: webdavExceptionResponseBody('NotFound', resourceNotFoundExceptionMessage(parentFolder))
       }
     } else {
       response = {
         status: 207,
-        headers: applicationXmlResponseHeaders,
+        headers: applicationXmlContentType,
         body: new XmlBuilder('1.0', 'utf-8', 'd:multistatus').build(dMultistatus => {
           dMultistatus.setAttributes({ 'xmlns:d': 'DAV:' })
           dMultistatus
@@ -118,8 +118,9 @@ describe('Main: Currently testing files management,', function () {
         headers: {
           ...validAuthHeaders,
           Depth: depth,
-          ...applicationXmlResponseHeaders
+          ...applicationXmlContentType
         },
+        contentType: applicationXmlContentType['Content-Type'],
         body: new XmlBuilder('1.0', '', 'd:propfind').build(dPropfind => {
           dPropfind.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
           dPropfind.appendElement('d:prop', '', '')
@@ -186,8 +187,9 @@ describe('Main: Currently testing files management,', function () {
         path: webdavPath(file, username),
         headers: {
           ...validAuthHeaders,
-          ...applicationXmlResponseHeaders
+          ...applicationXmlContentType
         },
+        contentType: applicationXmlContentType['Content-Type'],
         body: new XmlBuilder('1.0', '', 'd:propertyupdate').build(dPropUpdate => {
           dPropUpdate.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
           dPropUpdate.appendElement('d:set', '', dSet => {
@@ -198,7 +200,7 @@ describe('Main: Currently testing files management,', function () {
         })
       }).willRespondWith({
         status: 207,
-        headers: applicationXmlResponseHeaders,
+        headers: applicationXmlContentType,
         body: new XmlBuilder('1.0', 'utf-8', 'd:multistatus').build(dMultistatus => {
           dMultistatus.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:s': 'http://sabredav.org/ns', 'xmlns:oc': 'http://owncloud.org/ns' })
           dMultistatus
@@ -571,7 +573,7 @@ describe('Main: Currently testing files management,', function () {
         })
         .willRespondWith({
           status: 409,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: webdavExceptionResponseBody('Conflict', 'Parent node does not exist')
         })
 
@@ -670,7 +672,7 @@ describe('Main: Currently testing files management,', function () {
         },
         {
           status: 403,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: webdavExceptionResponseBody('Forbidden', 'Source and destination uri are identical.')
         })
       return provider.executeTest(async () => {
@@ -764,7 +766,7 @@ describe('Main: Currently testing files management,', function () {
         })
         .willRespondWith({
           status: 404,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: webdavExceptionResponseBody('NotFound', resourceNotFoundExceptionMessage(nonExistentFile))
         })
 
@@ -807,7 +809,7 @@ describe('Main: Currently testing files management,', function () {
         })
         .willRespondWith({
           status: 403,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: webdavExceptionResponseBody('Forbidden', 'Source and destination uri are identical.')
         })
 
@@ -848,7 +850,7 @@ describe('Main: Currently testing files management,', function () {
         })
         .willRespondWith({
           status: 404,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: webdavExceptionResponseBody('NotFound', resourceNotFoundExceptionMessage(nonExistentFile))
         })
       return provider.executeTest(async () => {
@@ -883,8 +885,9 @@ describe('Main: Currently testing files management,', function () {
           ),
           headers: {
             ...validAuthHeaders,
-            ...applicationXmlResponseHeaders
+            ...applicationXmlContentType
           },
+          contentType: applicationXmlContentType['Content-Type'],
           body: new XmlBuilder('1.0', '', 'd:propfind').build(dPropfind => {
             dPropfind.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
             dPropfind.appendElement('d:prop', '', dProp => {
@@ -894,7 +897,7 @@ describe('Main: Currently testing files management,', function () {
         })
         .willRespondWith({
           status: 207,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: new XmlBuilder('1.0', '', 'd:multistatus').build(dMultistatus => {
             dMultistatus.setAttributes({
               'xmlns:d': 'DAV:',
@@ -946,8 +949,9 @@ describe('Main: Currently testing files management,', function () {
           path: webdavPath(file, username),
           headers: {
             ...validAuthHeaders,
-            ...applicationXmlResponseHeaders
+            ...applicationXmlContentType
           },
+          contentType: applicationXmlContentType['Content-Type'],
           body: new XmlBuilder('1.0', '', 'd:propfind').build(dPropfind => {
             dPropfind.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
             dPropfind.appendElement('d:prop', '', dProp => {
@@ -957,7 +961,7 @@ describe('Main: Currently testing files management,', function () {
         })
         .willRespondWith({
           status: 207,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: new XmlBuilder('1.0', '', 'd:multistatus').build(dMultistatus => {
             dMultistatus.setAttributes({
               'xmlns:d': 'DAV:',
@@ -998,7 +1002,7 @@ describe('Main: Currently testing files management,', function () {
   // TUS protocol not implemented in oC10
   describe('TUS detection', function () {
     const tusSupportRequest = async (provider, enabled = true, path = '/') => {
-      let respHeaders = applicationXmlResponseHeaders
+      let respHeaders = applicationXmlContentType
       if (enabled) {
         respHeaders = {
           ...respHeaders,
@@ -1023,8 +1027,9 @@ describe('Main: Currently testing files management,', function () {
           path: webdavPath(path, username),
           headers: {
             ...validAuthHeaders,
-            ...applicationXmlResponseHeaders
+            ...applicationXmlContentType
           },
+          contentType: applicationXmlContentType['Content-Type'],
           body: new XmlBuilder('1.0', '', 'd:propfind').build(dPropfind => {
             dPropfind.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
             dPropfind.appendElement('d:prop', '', '')
@@ -1379,8 +1384,9 @@ describe('Main: Currently testing files management,', function () {
           ),
           headers: {
             ...validAuthHeaders,
-            ...applicationXmlResponseHeaders
+            ...applicationXmlContentType
           },
+          contentType: applicationXmlContentType['Content-Type'],
           body: new XmlBuilder('1.0', '', 'oc:filter-files').build(ocFilterFiles => {
             ocFilterFiles.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
             ocFilterFiles.appendElement('d:prop', '', dProp => {
@@ -1392,7 +1398,7 @@ describe('Main: Currently testing files management,', function () {
         })
         .willRespondWith({
           status: 207,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: new XmlBuilder('1.0', '', 'd:multistatus').build(dMultistatus => {
             dMultistatus.setAttributes({
               'xmlns:d': 'DAV:',
@@ -1448,8 +1454,9 @@ describe('Main: Currently testing files management,', function () {
           ),
           headers: {
             ...validAuthHeaders,
-            ...applicationXmlResponseHeaders
+            ...applicationXmlContentType
           },
+          contentType: applicationXmlContentType['Content-Type'],
           body: new XmlBuilder('1.0', '', 'oc:filter-files').build(ocFilterFiles => {
             ocFilterFiles.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
             ocFilterFiles.appendElement('d:prop', '', dProp => {
@@ -1461,7 +1468,7 @@ describe('Main: Currently testing files management,', function () {
         })
         .willRespondWith({
           status: 207,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: new XmlBuilder('1.0', '', 'd:multistatus').build(dMultistatus => {
             dMultistatus.setAttributes({
               'xmlns:d': 'DAV:',
@@ -1514,8 +1521,9 @@ describe('Main: Currently testing files management,', function () {
           ),
           headers: {
             ...validAuthHeaders,
-            ...applicationXmlResponseHeaders
+            ...applicationXmlContentType
           },
+          contentType: applicationXmlContentType['Content-Type'],
           body: new XmlBuilder('1.0', '', 'oc:search-files').build(ocSearchFiles => {
             ocSearchFiles.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
             ocSearchFiles.appendElement('d:prop', '', dProp => {
@@ -1532,7 +1540,7 @@ describe('Main: Currently testing files management,', function () {
         })
         .willRespondWith({
           status: 207,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: new XmlBuilder('1.0', '', 'd:multistatus').build(dMultistatus => {
             dMultistatus.setAttributes({
               'xmlns:d': 'DAV:',
@@ -1584,7 +1592,7 @@ describe('Main: Currently testing files management,', function () {
       const getFileInfoBy = data => {
         return {
           status: 207,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: new XmlBuilder('1.0', '', 'd:multistatus').build(dMultistatus => {
             dMultistatus.setAttributes({
               'xmlns:d': 'DAV:',
@@ -1629,8 +1637,9 @@ describe('Main: Currently testing files management,', function () {
           ),
           headers: {
             ...validAuthHeaders,
-            ...applicationXmlResponseHeaders
+            ...applicationXmlContentType
           },
+          contentType: applicationXmlContentType['Content-Type'],
           body: new XmlBuilder('1.0', '', 'oc:filter-files').build(ocFilterFiles => {
             ocFilterFiles.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
             ocFilterFiles.appendElement('d:prop', '', dProp => {

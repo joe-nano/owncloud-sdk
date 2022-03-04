@@ -9,7 +9,8 @@ describe('oc.publicFiles', function () {
   const { testUser, testUserPassword, testFolder, testFile } = config
 
   const {
-    applicationXmlResponseHeaders,
+    applicationXmlContentType,
+    applicationFormUrlEncodedContentType,
     htmlResponseAndAccessControlCombinedHeader,
     getCapabilitiesInteraction,
     getCurrentUserInformationInteraction,
@@ -85,9 +86,7 @@ describe('oc.publicFiles', function () {
     let headers = textPlainResponseHeaders
     let responseHeaders = {}
     if (method === 'PUT') {
-      headers = {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
+      headers = applicationFormUrlEncodedContentType
       responseHeaders = {
         ETag: MatchersV3.string('f356def9fc42fd4cbddf293eba3efa86'),
         'OC-ETag': MatchersV3.string('f356def9fc42fd4cbddf293eba3efa86')
@@ -130,6 +129,7 @@ describe('oc.publicFiles', function () {
           `/remote.php/dav/public-files/${config.shareTokenOfPublicLinkFolder}/${testFile}`
         ),
         headers,
+        contentType: headers['Content-Type'],
         body: requestBody
       })
       .willRespondWith({
@@ -254,8 +254,9 @@ describe('oc.publicFiles', function () {
                 path: publicLinkShareTokenPath,
                 headers: {
                   ...headers,
-                  ...applicationXmlResponseHeaders
+                  ...applicationXmlContentType
                 },
+                contentType: applicationXmlContentType['Content-Type'],
                 body: new XmlBuilder('1.0', '', 'd:propfind').build(dPropfind => {
                   dPropfind.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
                   dPropfind.appendElement('d:prop', '', dProp => {
@@ -274,7 +275,7 @@ describe('oc.publicFiles', function () {
               // https://github.com/owncloud/ocis/issues/1945
               .willRespondWith({
                 status,
-                headers: applicationXmlResponseHeaders,
+                headers: applicationXmlContentType,
                 body
               })
           }
@@ -651,8 +652,9 @@ describe('oc.publicFiles', function () {
               path: publicLinkShareTokenPath,
               headers: {
                 ...getPublicLinkAuthHeader(data.shareParams.password),
-                ...applicationXmlResponseHeaders
+                ...applicationXmlContentType
               },
+              contentType: applicationXmlContentType['Content-Type'],
               body: new XmlBuilder('1.0', '', 'd:propfind').build(dPropfind => {
                 dPropfind.setAttributes({ 'xmlns:d': 'DAV:', 'xmlns:oc': 'http://owncloud.org/ns' })
                 dPropfind.appendElement('d:prop', '', dProp => {
@@ -667,7 +669,7 @@ describe('oc.publicFiles', function () {
             })
             .willRespondWith({
               status: 207,
-              headers: applicationXmlResponseHeaders,
+              headers: applicationXmlContentType,
               body: propfindBody('15')
             })
 

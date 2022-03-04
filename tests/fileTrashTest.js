@@ -15,7 +15,7 @@ describe('oc.fileTrash', function () {
     getCapabilitiesInteraction,
     createOwncloud,
     createProvider,
-    applicationXmlResponseHeaders,
+    applicationXmlContentType,
     getMockServerBaseUrl,
     getAuthHeaders,
     htmlResponseHeaders,
@@ -129,6 +129,7 @@ describe('oc.fileTrash', function () {
       method: method,
       path: path,
       headers: headers,
+      contentType: headers['Content-Type'],
       body: body
     }
   }
@@ -175,11 +176,11 @@ describe('oc.fileTrash', function () {
         .withRequest(requestMethod(
           'PROPFIND',
           trashbinPath,
-          { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+          { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
           emptyTrashbinXmlRequestBody
         )).willRespondWith({
           status: 207,
-          headers: applicationXmlResponseHeaders,
+          headers: applicationXmlContentType,
           body: trashbinXmlResponseBody()
         })
       return provider.executeTest(async () => {
@@ -224,7 +225,7 @@ describe('oc.fileTrash', function () {
               '.*\\/remote\\.php\\/dav\\/trash-bin\\/' + testUser + '\\/$',
               '/remote.php/dav/trash-bin/' + testUser + '/'
             ),
-            { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+            { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
             emptyTrashbinXmlRequestBody
           )).willRespondWith(responseMethod(
             207,
@@ -255,7 +256,7 @@ describe('oc.fileTrash', function () {
               '/remote.php/dav/trash-bin/' + testUser + '/${trashId}', /* eslint-disable-line no-template-curly-in-string */
               `/remote.php/dav/trash-bin/${testUser}/${deletedFolderId}`
             ),
-            { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+            { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
             emptyTrashbinXmlRequestBody
           ))
           .willRespondWith({
@@ -395,7 +396,7 @@ describe('oc.fileTrash', function () {
           .withRequest(requestMethod(
             'PROPFIND',
             trashbinPath,
-            { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+            { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
             emptyTrashbinXmlRequestBody
           ))
           .willRespondWith(responseMethod(
@@ -423,12 +424,13 @@ describe('oc.fileTrash', function () {
               `.*\\/remote\\.php\\/dav\\/files\\/${testUser}\\/${testFolder}`,
               `/remote.php/dav/files/${testUser}/${testFolder}`
             ),
-            headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+            headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
+            contentType: applicationXmlContentType['Content-Type'],
             body: filesListXmlRequestBody
           })
           .willRespondWith({
             status: 207,
-            headers: applicationXmlResponseHeaders,
+            headers: applicationXmlContentType,
             body: new XmlBuilder('1.0', '', 'd:multistatus').build(dMultistatus => {
               dMultistatus.setAttributes({
                 'xmlns:d': 'DAV:',
@@ -529,12 +531,12 @@ describe('oc.fileTrash', function () {
           .withRequest(requestMethod(
             'PROPFIND',
             trashbinPath,
-            { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+            { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
             emptyTrashbinXmlRequestBody
           ))
           .willRespondWith(responseMethod(
             207,
-            applicationXmlResponseHeaders,
+            applicationXmlContentType,
             trashbinXmlResponseBody()
           ))
       }
@@ -557,12 +559,13 @@ describe('oc.fileTrash', function () {
               `.*\\/remote\\.php\\/dav\\/files\\/${testUser}\\/${testFolder}.*$`,
               `/remote.php/dav/files/${testUser}/${testFolder}${encodeURIComponent(suffix)}`
             ),
-            headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+            headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
+            contentType: applicationXmlContentType['Content-Type'],
             body: filesListXmlRequestBody
           })
           .willRespondWith({
             status: 207,
-            headers: applicationXmlResponseHeaders,
+            headers: applicationXmlContentType,
             body: new XmlBuilder('1.0', '', 'd:multistatus').build(dMultistatus => {
               dMultistatus.setAttributes({
                 'xmlns:d': 'DAV:',
@@ -645,12 +648,12 @@ describe('oc.fileTrash', function () {
           .withRequest(requestMethod(
             'PROPFIND',
             trashbinPath,
-            { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+            { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
             emptyTrashbinXmlRequestBody
           ))
           .willRespondWith({
             status: 207,
-            headers: applicationXmlResponseHeaders,
+            headers: applicationXmlContentType,
             body: new XmlBuilder('1.0', '', 'd:multistatus').build(dMultistatus => {
               dMultistatus.setAttributes({
                 'xmlns:d': 'DAV:',
@@ -761,7 +764,7 @@ describe('oc.fileTrash', function () {
           .withRequest(requestMethod(
             'PROPFIND',
             trashbinPath,
-            { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+            { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
             emptyTrashbinXmlRequestBody
           ))
           .willRespondWith(responseMethod(207, responseHeader('application/xml; charset=utf-8'), trashbinXmlResponseBody()))
@@ -785,7 +788,8 @@ describe('oc.fileTrash', function () {
               `.*\\/remote\\.php\\/dav\\/files\\/${testUser}\\/${testFolder}.*$`,
               `/remote.php/dav/files/${testUser}/${testFolder}`
             ),
-            headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+            headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
+            contentType: applicationXmlContentType['Content-Type'],
             body: filesListXmlRequestBody
           })
           .willRespondWith({
@@ -894,7 +898,8 @@ describe('oc.fileTrash', function () {
           .withRequest({
             method: 'PROPFIND',
             path: trashbinPath,
-            headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+            headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
+            contentType: applicationXmlContentType['Content-Type'],
             body: emptyTrashbinXmlRequestBody
           })
           .willRespondWith({
@@ -922,7 +927,8 @@ describe('oc.fileTrash', function () {
               `.*\\/remote\\.php\\/dav\\/files\\/${testUser}\\/.*`,
               `/remote.php/dav/files/${testUser}/file%20(restored%20to%20a%20different%20location).txt/`
             ),
-            headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlResponseHeaders },
+            headers: { authorization: getAuthHeaders(testUser, testUserPassword), ...applicationXmlContentType },
+            contentType: applicationXmlContentType['Content-Type'],
             body: filesListXmlRequestBody
           })
           .willRespondWith({
@@ -1008,7 +1014,7 @@ describe('oc.fileTrash', function () {
           })
           .willRespondWith({
             status: 409,
-            headers: applicationXmlResponseHeaders,
+            headers: applicationXmlContentType,
             body: webdavExceptionResponseBody('Conflict', 'The destination node is not found')
           })
       }

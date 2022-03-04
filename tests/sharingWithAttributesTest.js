@@ -5,7 +5,7 @@ describe('oc.shares', function () {
 
   const {
     xmlResponseHeaders,
-    applicationFormUrlEncoded,
+    applicationFormUrlEncodedContentType,
     ocsMeta,
     shareResponseOcsData,
     getCapabilitiesInteraction,
@@ -49,8 +49,9 @@ describe('oc.shares', function () {
         ),
         headers: {
           authorization: getAuthHeaders(testUser, testUserPassword),
-          ...applicationFormUrlEncoded
+          ...applicationFormUrlEncodedContentType
         },
+        contentType: applicationFormUrlEncodedContentType['Content-Type'],
         body: 'shareType=0&shareWith=' + shareeName + '&path=%2F' + testFile +
           '&attributes%5B0%5D%5Bscope%5D=' + shareAttributes.attributes[0].scope +
           '&attributes%5B0%5D%5Bkey%5D=' + shareAttributes.attributes[0].key +

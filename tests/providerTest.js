@@ -36,7 +36,7 @@ describe('provider testing', () => {
 
   const {
     validAdminAuthHeaders,
-    applicationFormUrlEncoded,
+    applicationFormUrlEncodedContentType,
     getAuthHeaders,
     sanitizeUrl,
     getProviderBaseUrl
@@ -116,7 +116,7 @@ describe('provider testing', () => {
           body: 'groupid=' + parameters.groupName,
           headers: {
             ...validAdminAuthHeaders,
-            ...applicationFormUrlEncoded
+            ...applicationFormUrlEncodedContentType
           }
         })
         return { description: 'group added' }
@@ -201,7 +201,7 @@ describe('provider testing', () => {
             body: `userid=${parameters.username}&password=${parameters.password}&email=${email}`,
             headers: {
               ...validAdminAuthHeaders,
-              ...applicationFormUrlEncoded
+              ...applicationFormUrlEncodedContentType
             }
           })
         chai.assert.strictEqual(
@@ -256,7 +256,7 @@ describe('provider testing', () => {
           body: `groupid=${parameters.groupName}`,
           headers: {
             ...validAdminAuthHeaders,
-            ...applicationFormUrlEncoded
+            ...applicationFormUrlEncodedContentType
           }
         })
         const { status } = getOCSMeta(response)
@@ -276,7 +276,7 @@ describe('provider testing', () => {
           body: `groupid=${parameters.groupName}`,
           headers: {
             ...validAdminAuthHeaders,
-            ...applicationFormUrlEncoded
+            ...applicationFormUrlEncodedContentType
           }
         })
         const { status } = getOCSMeta(response)

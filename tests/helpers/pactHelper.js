@@ -66,13 +66,13 @@ const shareResponseOcsData = function (node, shareType, id, permissions, fileTar
   return res
 }
 
-const applicationXmlResponseHeaders = {
+const applicationXmlContentType = {
   'Content-Type': 'application/xml; charset=utf-8'
 }
 const textPlainResponseHeaders = {
   'Content-Type': 'text/plain; charset=utf-8'
 }
-const applicationFormUrlEncoded = { 'Content-Type': 'application/x-www-form-urlencoded' }
+const applicationFormUrlEncodedContentType = { 'Content-Type': 'application/x-www-form-urlencoded' }
 
 const xmlResponseHeaders = {
   'Content-Type': MatchersV3.regex(
@@ -192,7 +192,7 @@ const getContentsOfFileInteraction = (
       body: config.testContent
     } : {
       status: 404,
-      headers: applicationXmlResponseHeaders,
+      headers: applicationXmlContentType,
       body: webdavExceptionResponseBody('NotFound', resourceNotFoundExceptionMessage(config.nonExistentFile))
     })
 }
@@ -208,7 +208,7 @@ const deleteResourceInteraction = (
   if (resource.includes('nonExistent')) {
     response = {
       status: 404,
-      headers: applicationXmlResponseHeaders,
+      headers: applicationXmlContentType,
       body: webdavExceptionResponseBody('NotFound', resourceNotFoundExceptionMessage(config.nonExistentDir))
     }
   } else if (type === 'file') {
@@ -263,7 +263,7 @@ async function getCurrentUserInformationInteraction (
     })
     .willRespondWith({
       status: 200,
-      headers: applicationXmlResponseHeaders,
+      headers: applicationXmlContentType,
       body: new XmlBuilder('1.0', '', 'ocs').build(ocs => {
         ocs.appendElement('meta', '', (meta) => {
           meta.appendElement('status', '', MatchersV3.equal('ok'))
@@ -385,8 +385,9 @@ const createUserInteraction = function (provider) {
       ),
       headers: {
         ...validAdminAuthHeaders,
-        ...applicationFormUrlEncoded
+        ...applicationFormUrlEncodedContentType
       },
+      contentType: applicationFormUrlEncodedContentType['Content-Type'],
       body: `password=${config.testUserPassword}&userid=${config.testUser}`
     }).willRespondWith({
       status: 200,
@@ -406,8 +407,9 @@ const createUserWithGroupMembershipInteraction = function (provider) {
       ),
       headers: {
         ...validAdminAuthHeaders,
-        ...applicationFormUrlEncoded
+        ...applicationFormUrlEncodedContentType
       },
+      contentType: applicationFormUrlEncodedContentType['Content-Type'],
       body: 'password=' + config.testUserPassword + '&userid=' + config.testUser + '&groups%5B0%5D=' + config.testGroup
     })
     .willRespondWith({
@@ -499,7 +501,7 @@ const updateFileInteraction = function (provider, file, user = config.adminUsern
   if (file.includes(config.nonExistentDir)) {
     response = {
       status: 409,
-      headers: applicationXmlResponseHeaders,
+      headers: applicationXmlContentType,
       body: webdavExceptionResponseBody(
         'Conflict',
         'Files cannot be created in non-existent collections'
@@ -508,7 +510,7 @@ const updateFileInteraction = function (provider, file, user = config.adminUsern
   } else if (file.includes(config.nonExistentFile)) {
     response = {
       status: 404,
-      headers: applicationXmlResponseHeaders,
+      headers: applicationXmlContentType,
       body: webdavExceptionResponseBody(
         'NotFound',
         resourceNotFoundExceptionMessage(config.nonExistentDir)
@@ -530,8 +532,9 @@ const updateFileInteraction = function (provider, file, user = config.adminUsern
       path: webdavPath(file, user),
       headers: {
         authorization: getAuthHeaders(user, password),
-        'Content-Type': 'text/plain;charset=utf-8'
+        ...textPlainResponseHeaders
       },
+      contentType: textPlainResponseHeaders['Content-Type'],
       body: config.testContent
     })
     .willRespondWith(response)
@@ -563,12 +566,12 @@ module.exports = {
   invalidAuthHeader,
   xmlResponseHeaders,
   htmlResponseHeaders,
-  applicationFormUrlEncoded,
+  applicationFormUrlEncodedContentType,
   textPlainResponseHeaders,
   accessControlAllowHeaders,
   accessControlAllowMethods,
   unauthorizedXmlResponseBody,
-  applicationXmlResponseHeaders,
+  applicationXmlContentType,
   testSubFiles,
   getCapabilitiesInteraction,
   getCurrentUserInformationInteraction,
