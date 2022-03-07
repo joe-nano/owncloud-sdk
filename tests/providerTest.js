@@ -109,8 +109,8 @@ describe('provider testing', () => {
     defaultOpts.providerVersion = PROVIDER_VERSION
   }
   defaultOpts.stateHandlers = {
-    'group exists': (setup, parameters) => {
-      if (setup) {
+    'group exists': {
+      setup: (parameters) => {
         fetch(providerBaseUrl + '/ocs/v1.php/cloud/groups', {
           method: 'POST',
           body: 'groupid=' + parameters.groupName,
@@ -120,7 +120,8 @@ describe('provider testing', () => {
           }
         })
         return { description: 'group added' }
-      } else {
+      },
+      teardown: (parameters) => {
         fetch(providerBaseUrl + '/ocs/v1.php/cloud/groups/' + parameters.groupName, {
           method: 'DELETE',
           headers: validAdminAuthHeaders
@@ -128,26 +129,26 @@ describe('provider testing', () => {
         return { description: 'group deleted' }
       }
     },
-    'group does not exist': (setup, parameters) => {
+    'group does not exist': (parameters) => {
       fetch(providerBaseUrl + '/ocs/v1.php/cloud/groups/' + parameters.groupName, {
         method: 'DELETE',
         headers: validAdminAuthHeaders
       })
       return { description: 'group deleted' }
     },
-    'folder exists': (setup, parameters) => {
-      if (setup) {
+    'folder exists': {
+      setup: (parameters) => {
         const results = createFolderRecursive(
           parameters.username, parameters.password, parameters.folderName
         )
         assertFoldersCreatedSuccessfully(results, parameters.folderName)
+        return { description: 'folder created' }
       }
-      return { description: 'folder created' }
     },
-    'file exists': (setup, parameters) => {
-      const dirname = path.dirname(parameters.fileName)
-      const content = parameters.content || config.testContent
-      if (setup) {
+    'file exists': {
+      setup: (parameters) => {
+        const dirname = path.dirname(parameters.fileName)
+        const content = parameters.content || config.testContent
         if (dirname !== '' && dirname !== '/' && dirname !== '.') {
           const results = createFolderRecursive(
             parameters.username, parameters.password, dirname
@@ -163,33 +164,35 @@ describe('provider testing', () => {
         return { fileId: result.headers.get('oc-fileid') }
       }
     },
-    'resource is deleted': (setup, parameters) => {
-      if (!setup) {
-        return
-      }
-      const dirname = parameters.resourcePath
-      const result = deleteItem(parameters.username, parameters.password, dirname)
-      chai.assert.isBelow(
-        result.status, 300, `Deleting path '${dirname}' failed`
-      )
-      const items = getTrashBinElements(parameters.username, parameters.password)
-      let found = false
-      let id
-      for (const item of items) {
-        if (item.originalLocation === parameters.resourcePath) {
-          found = true
-          const parts = item.href.split('/').filter(el => el !== '')
-          id = parts[parts.length - 1]
-          break
+    'resource is deleted': {
+      setup: (parameters) => {
+        const dirname = parameters.resourcePath
+        const result = deleteItem(parameters.username, parameters.password, dirname)
+        chai.assert.isBelow(
+          result.status, 300, `Deleting path '${dirname}' failed`
+        )
+        const items = getTrashBinElements(parameters.username, parameters.password)
+        let found = false
+        let id
+        for (const item of items) {
+          if (item.originalLocation === parameters.resourcePath) {
+            found = true
+            const parts = item.href.split('/').filter(el => el !== '')
+            id = parts[parts.length - 1]
+            break
+          }
+        }
+
+        chai.assert.isTrue(found, 'Deleted item not found in trash')
+        return {
+          description: 'resource deleted',
+          trashId: id
         }
       }
-
-      chai.assert.isTrue(found, 'Deleted item not found in trash')
-      return { description: 'resource deleted', trashId: id }
     },
-    'the user is recreated': (setup, parameters) => {
-      const email = `${parameters.username}@example.com`
-      if (setup) {
+    'the user is recreated': {
+      setup: (parameters) => {
+        const email = `${parameters.username}@example.com`
         fetch(providerBaseUrl + '/ocs/v2.php/cloud/users/' + parameters.username, {
           method: 'DELETE',
           headers: validAdminAuthHeaders
@@ -225,8 +228,8 @@ describe('provider testing', () => {
     'provider base url is returned': () => {
       return { providerBaseURL: providerBaseUrl }
     },
-    'file version link is returned': (setup, parameters) => {
-      if (setup) {
+    'file version link is returned': {
+      setup: (parameters) => {
         const fileId = getFileId(parameters.username, parameters.password, parameters.fileName)
         const versionsResult = listVersionsFolder(parameters.username, parameters.password, fileId)
         let nodeValue = ''
@@ -245,30 +248,32 @@ describe('provider testing', () => {
         return { versionLink: link }
       }
     },
-    'user is made group subadmin': (setup, parameters) => {
-      // don't try to make users subadmins on OCIS because of
-      // https://github.com/owncloud/product/issues/289
-      if (setup && !isRunningWithOCIS()) {
-        const response = fetch(providerBaseUrl +
-          '/ocs/v1.php/cloud/users/' + parameters.username +
-          '/subadmins?format=json', {
-          method: 'POST',
-          body: `groupid=${parameters.groupName}`,
-          headers: {
-            ...validAdminAuthHeaders,
-            ...applicationFormUrlEncodedContentType
-          }
-        })
-        const { status } = getOCSMeta(response)
-        chai.assert.strictEqual(status, 'ok',
-          `making user ${parameters.username} subadmin of group ${parameters.groupName} failed`)
-      }
-      return {
-        description: `user '${parameters.username}' made subadmin of group '${parameters.groupName}'`
+    'user is made group subadmin': {
+      setup: (parameters) => {
+        // don't try to make users subadmins on OCIS because of
+        // https://github.com/owncloud/product/issues/289
+        if (!isRunningWithOCIS()) {
+          const response = fetch(providerBaseUrl +
+            '/ocs/v1.php/cloud/users/' + parameters.username +
+            '/subadmins?format=json', {
+            method: 'POST',
+            body: `groupid=${parameters.groupName}`,
+            headers: {
+              ...validAdminAuthHeaders,
+              ...applicationFormUrlEncodedContentType
+            }
+          })
+          const { status } = getOCSMeta(response)
+          chai.assert.strictEqual(status, 'ok',
+            `making user ${parameters.username} subadmin of group ${parameters.groupName} failed`)
+        }
+        return {
+          description: `user '${parameters.username}' made subadmin of group '${parameters.groupName}'`
+        }
       }
     },
-    'user is added to group': (setup, parameters) => {
-      if (setup) {
+    'user is added to group': {
+      setup: (parameters) => {
         const response = fetch(providerBaseUrl +
           '/ocs/v1.php/cloud/users/' + parameters.username +
           '/groups?format=json', {
@@ -282,13 +287,13 @@ describe('provider testing', () => {
         const { status } = getOCSMeta(response)
         chai.assert.strictEqual(status, 'ok',
           `adding user ${parameters.username} to group ${parameters.groupName} failed`)
-      }
-      return {
-        description: `user '${parameters.username}' added to group '${parameters.groupName}'`
+        return {
+          description: `user '${parameters.username}' added to group '${parameters.groupName}'`
+        }
       }
     },
-    'resource is shared': (setup, parameters) => {
-      if (setup) {
+    'resource is shared': {
+      setup: (parameters) => {
         const { username, userPassword, ...shareParams } = parameters
         const response = shareResource(username, userPassword, shareParams)
         const { status } = getOCSMeta(response)
@@ -300,10 +305,9 @@ describe('provider testing', () => {
 
         return getOCSData(response)
       }
-      return { description: 'file/folder shared' }
     },
-    'folder exists in last shared public share': (setup, parameters) => {
-      if (setup) {
+    'folder exists in last shared public share': {
+      setup: (parameters) => {
         const { folderName } = parameters
         const response = createFolderInLastPublicShare(lastSharedToken, folderName)
 
@@ -312,11 +316,11 @@ describe('provider testing', () => {
         if (status !== 201 && status !== 405) {
           chai.assert.fail('creating folder in last public share failed')
         }
+        return { description: 'folder created in last shared public share' }
       }
-      return { description: 'folder created in last shared public share' }
     },
-    'file exists in last shared public share': (setup, parameters) => {
-      if (setup) {
+    'file exists in last shared public share': {
+      setup: (parameters) => {
         const {
           fileName,
           content
@@ -327,11 +331,11 @@ describe('provider testing', () => {
         if (status !== 201 && status !== 204) {
           chai.assert.fail('creating file in last public share failed')
         }
+        return { description: 'file created in last shared public share' }
       }
-      return { description: 'file created in last shared public share' }
     },
-    'signed-key is returned': (setup, parameters) => {
-      if (setup) {
+    'signed-key is returned': {
+      setup: (parameters) => {
         let url = providerBaseUrl + `/remote.php/dav/files/${parameters.username}/${parameters.path}`
         url = sanitizeUrl(url)
         const signKey = getSignKey(parameters.username, parameters.password)
@@ -353,13 +357,13 @@ describe('provider testing', () => {
         }
       }
     },
-    'the client waits': (setup, parameters) => {
-      if (setup) {
+    'the client waits': {
+      setup: (parameters) => {
         delay(parameters.delay)
       }
     },
-    'file is marked as favorite': (setup, parameters) => {
-      if (setup) {
+    'file is marked as favorite': {
+      setup: (parameters) => {
         const { username, password, path } = parameters
         const { status } = markAsFavorite(username, password, path)
 
@@ -368,8 +372,8 @@ describe('provider testing', () => {
         }
       }
     },
-    'a system tag is created': (setup, parameters) => {
-      if (setup) {
+    'a system tag is created': {
+      setup: (parameters) => {
         const { username, password, tag } = parameters
         const response = createASystemTag(username, password, tag)
         let tagId
@@ -388,8 +392,8 @@ describe('provider testing', () => {
         return { tagId }
       }
     },
-    'a tag is assigned to a file': (setup, parameters) => {
-      if (setup) {
+    'a tag is assigned to a file': {
+      setup: (parameters) => {
         const { username, password, fileName, tagName } = parameters
         // tagging not implement on oCIS
         if (isRunningWithOCIS()) {
