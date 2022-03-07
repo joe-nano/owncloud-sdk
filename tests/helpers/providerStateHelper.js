@@ -84,7 +84,7 @@ const givenUserShareExists = (
       path,
       shareType: SHARE_TYPE.user,
       shareWith,
-      ...optionalParams
+      ...removeUndefinedKeys(optionalParams)
     })
 }
 
@@ -117,7 +117,8 @@ const givenGroupShareExists = (
       path,
       shareType: SHARE_TYPE.group,
       shareWith,
-      ...optionalParams
+      ...removeUndefinedKeys(optionalParams)
+
     })
 }
 
@@ -150,7 +151,7 @@ const givenPublicShareExists = (
       userPassword,
       path,
       shareType: SHARE_TYPE.public,
-      ...optionalParams
+      ...removeUndefinedKeys(optionalParams)
     })
 }
 
@@ -284,6 +285,20 @@ const givenSystemTagExists = (provider, username, password, tag) => {
 const givenTagIsAssignedToFile = (provider, username, password, fileName, tagName) => {
   return provider
     .given('a tag is assigned to a file', { username, password, fileName, tagName })
+}
+
+/**
+ * removes all key-value pairs where the value is 'undefined'
+ * pact does not accept undefined values in given parameters
+ * @param optionalParams
+ * @returns {{}|any}
+ */
+function removeUndefinedKeys (optionalParams) {
+  if (optionalParams === undefined) {
+    return {}
+  } else {
+    return JSON.parse(JSON.stringify(optionalParams))
+  }
 }
 
 module.exports = {
