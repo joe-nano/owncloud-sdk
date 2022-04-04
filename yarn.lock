@@ -1186,10 +1186,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@pact-foundation/pact-core@13.4.1-beta.18":
-  version "13.4.1-beta.18"
-  resolved "https://registry.yarnpkg.com/@pact-foundation/pact-core/-/pact-core-13.4.1-beta.18.tgz#bab82b2997ea0567922bc60134f2ede23e766b5f"
-  integrity sha512-rjmCU4fnYhYkcKAT4HxVBMkQTxHjkn5QaKIqwMy7vDH89vG1VdGLg7V7NZx/vNf1GXuv5OmV0zeZD4r3tfFRtw==
+"@pact-foundation/pact-core@^13.6.0":
+  version "13.6.0"
+  resolved "https://registry.yarnpkg.com/@pact-foundation/pact-core/-/pact-core-13.6.0.tgz#1cae70fffdb767c639928c7fb9a565bab84b2606"
+  integrity sha512-ub5chEOHrmtwjFndBQyEsj6Ex2HFAZ6+Nur7ErBvirLlFQJv0to9HYi6MLj4L4pWLdl1rGo/3XV6iA5imUzcTg==
   dependencies:
     "@types/needle" "2.5.2"
     "@types/pino" "6.3.11"
@@ -1207,12 +1207,12 @@
     underscore "1.12.1"
     unixify "1.0.0"
 
-"@pact-foundation/pact@10.0.0-beta.58":
-  version "10.0.0-beta.58"
-  resolved "https://registry.yarnpkg.com/@pact-foundation/pact/-/pact-10.0.0-beta.58.tgz#a070ae7e7a52f06e7476b6c6f95c086e6de9e063"
-  integrity sha512-tEkTgrlAjH6F0YOlsrPoIHCrfhfjR7Ku0c2zzgJofGtGv0jXm/yuKJlK750Jia5hgly3nhNMLUEdps0iAH4o8A==
+"@pact-foundation/pact@10.0.0-beta.59":
+  version "10.0.0-beta.59"
+  resolved "https://registry.yarnpkg.com/@pact-foundation/pact/-/pact-10.0.0-beta.59.tgz#30626fc6b4c1bc7929c619db8081512e1f447a88"
+  integrity sha512-J9PIEmw198znLXyqmeMzOnZSizB0cXMamUJ1fL2JriaMa5zIUbi94Us4lTvoOdwjeEL5qoCcin181LwghcdJ+A==
   dependencies:
-    "@pact-foundation/pact-core" "13.4.1-beta.18"
+    "@pact-foundation/pact-core" "^13.6.0"
     "@types/bluebird" "^3.5.20"
     "@types/express" "^4.17.11"
     bluebird "~3.5.1"
